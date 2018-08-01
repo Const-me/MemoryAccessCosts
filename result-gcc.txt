@@ -1,0 +1,23 @@
+Testing on 8192 MB vector
+16: 0.0851632 seconds/test, 281 cycles/iteration
+8: 0.056554 seconds/test, 187 cycles/iteration
+4: 0.0554442 seconds/test, 183 cycles/iteration
+1: 0.0517496 seconds/test, 171 cycles/iteration
+
+Testing on 4096 MB vector
+16: 0.0782729 seconds/test, 258 cycles/iteration
+8: 0.0479214 seconds/test, 158 cycles/iteration
+4: 0.0448992 seconds/test, 148 cycles/iteration
+1: 0.0409041 seconds/test, 135 cycles/iteration
+
+Testing on 1024 MB vector
+16: 0.0481061 seconds/test, 159 cycles/iteration
+8: 0.0255384 seconds/test, 84 cycles/iteration
+4: 0.0188578 seconds/test, 62 cycles/iteration
+1: 0.0177085 seconds/test, 58 cycles/iteration
+
+Testing on 32 MB vector
+16: 0.0355199 seconds/test, 117 cycles/iteration
+8: 0.0189505 seconds/test, 63 cycles/iteration
+4: 0.0140155 seconds/test, 46 cycles/iteration
+1: 0.0109975 seconds/test, 36 cycles/iteration
