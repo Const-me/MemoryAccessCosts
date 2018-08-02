@@ -9,4 +9,7 @@
   <ItemGroup>
     <ClCompile Include="MemoryAccessCosts.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Readme.md" />
+  </ItemGroup>
 </Project>
