@@ -3,8 +3,9 @@
 using tVector = alignedVector<uint32_t>;
 
 #ifdef _MSC_VER
-using tTimer = QpcTimer;
-// using tTimer = CyclesTimer;
+using tTimer = 
+	QpcTimer;
+	// CyclesTimer;
 #else
 using tTimer = CyclesTimer;
 #endif
@@ -37,18 +38,20 @@ struct Dims
 };
 
 template<class tDims>
-tVector createRandomArray( Random &rng )
+tVector createRandomArray()
 {
 	tVector vec;
 	vec.resize( tDims::scalarsCount() );
+	Random rng;
 	for( uint32_t& v : vec )
 		v = rng.next() & 0x7FFFFFF;
 	return vec;
 }
 
 template<class tDims, uint32_t nIntegers>
-inline uint32_t sumRandomsScalar( const tVector& vec, Random &rng )
+inline uint32_t sumRandomsScalar( const tVector& vec )
 {
+	Random rng;
 	const uint32_t* const pData = vec.data();
 	uint32_t counter = 0;
 	for( size_t i = 0; i < iterationsCount; i++ )
@@ -61,19 +64,17 @@ inline uint32_t sumRandomsScalar( const tVector& vec, Random &rng )
 }
 
 template<class tFunc>
-bool calcBestTime( const char* msg, Random &random, tFunc func )
+bool calcBestTime( const char* msg, tFunc func )
 {
 	constexpr int bestTimeIterations = 16;
 
-	random.reset();
-	const uint32_t referenceValue = func( random );
+	const uint32_t referenceValue = func();
 
 	uint64_t minTime = std::numeric_limits<uint64_t>::max();
 	for( int i = 0; i < bestTimeIterations; i++ )
 	{
-		random.reset();
 		const tTimer timer;
-		const uint32_t currentValue = func( random );
+		const uint32_t currentValue = func();
 		const uint64_t elapsed = timer.elapsed();
 		if( currentValue == referenceValue )
 		{
@@ -93,13 +94,12 @@ void demo()
 	using tDims = Dims<CacheLinesLog2>;
 	printf( "Testing on %g MB vector\n", tDims::megabytes() );
 
-	Random random;
-	const alignedVector<uint32_t> vec = createRandomArray<tDims>( random );
+	const alignedVector<uint32_t> vec = createRandomArray<tDims>();
 
-	calcBestTime( "16", random, [ &vec ]( Random &r ) { return sumRandomsScalar<tDims, 16>( vec, r ); } );
-	calcBestTime( "8", random, [ &vec ]( Random &r ) { return sumRandomsScalar<tDims, 8>( vec, r ); } );
-	calcBestTime( "4", random, [ &vec ]( Random &r ) { return sumRandomsScalar<tDims, 4>( vec, r ); } );
-	calcBestTime( "1", random, [ &vec ]( Random &r ) { return sumRandomsScalar<tDims, 1>( vec, r ); } );
+	calcBestTime( "16", [ &vec ]() { return sumRandomsScalar<tDims, 16>( vec ); } );
+	calcBestTime( "8", [ &vec ]() { return sumRandomsScalar<tDims, 8>( vec ); } );
+	calcBestTime( "4", [ &vec ]() { return sumRandomsScalar<tDims, 4>( vec ); } );
+	calcBestTime( "1", [ &vec ]() { return sumRandomsScalar<tDims, 1>( vec ); } );
 
 	printf( "\n" );
 }
