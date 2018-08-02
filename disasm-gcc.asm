@@ -15,7 +15,7 @@ mov     r12d, edx
 and     r12d, 0FFFFFFFh
 shl     r12, 5
 
-; The inner loop
+; The inner loop adds 16 integer values. As you see, gcc unrolled it completely.
 mov     eax, [rcx+r12+8]
 add     eax, [rcx+r12+4]
 add     eax, [rcx+r12]

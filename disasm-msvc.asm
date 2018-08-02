@@ -21,14 +21,14 @@ xor     eax, eax
 db      66h, 66h
 nop     word ptr [rax+rax+00000000h]
 
-; The inner loop, adds 16 floats using 2 iterations, each processing 2 __m128i values.
+; The inner loop. It adds 16 integer values using 2 iterations, each processing 2 __m128i values, each value containing 4 integers.
 loc_140001730:
-movdqu  xmm0, xmmword ptr [rcx+rax*4]
-paddd   xmm0, xmm1
+movdqu  xmm0, xmmword ptr [rcx+rax*4]	; _mm_loadu_si128
+paddd   xmm0, xmm1	; _mm_add_epi32
 movdqa  xmm1, xmm0
-movdqu  xmm0, xmmword ptr [rcx+rax*4+10h]
+movdqu  xmm0, xmmword ptr [rcx+rax*4+10h]	; _mm_loadu_si128
 add     rax, 8
-paddd   xmm0, xmm2
+paddd   xmm0, xmm2	; _mm_add_epi32
 movdqa  xmm2, xmm0
 cmp     rax, 10h
 jb      short loc_140001730
