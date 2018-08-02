@@ -17,6 +17,7 @@ constexpr size_t iterationsCount = 1000 * 1000;
 template<uint32_t CacheLinesLog2>
 struct Dims
 {
+	// Index of the start of a random cache line in the uint32_t vector
 	static size_t randomLineIndex( Random &rng )
 	{
 		const uint32_t r = rng.next();
@@ -95,16 +96,9 @@ void demo()
 	Random random;
 	const alignedVector<uint32_t> vec = createRandomArray<tDims>( random );
 
-	random.reset();
 	calcBestTime( "16", random, [ &vec ]( Random &r ) { return sumRandomsScalar<tDims, 16>( vec, r ); } );
-
-	random.reset();
 	calcBestTime( "8", random, [ &vec ]( Random &r ) { return sumRandomsScalar<tDims, 8>( vec, r ); } );
-
-	random.reset();
 	calcBestTime( "4", random, [ &vec ]( Random &r ) { return sumRandomsScalar<tDims, 4>( vec, r ); } );
-
-	random.reset();
 	calcBestTime( "1", random, [ &vec ]( Random &r ) { return sumRandomsScalar<tDims, 1>( vec, r ); } );
 
 	printf( "\n" );
